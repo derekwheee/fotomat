@@ -5,8 +5,6 @@
 
     observer.check().then(function () {
         d.documentElement.className += ' fonts-loaded';
-    }, function () {
-        console.log('Font is not available');
     });
 }(window, window.document));
 

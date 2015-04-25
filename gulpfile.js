@@ -17,119 +17,6 @@ var gulp         = require('gulp'),
     request      = require('request'),
     path         = require( 'path' );
 
-gulp.task('sass:dev', function () {
-
-    console.log(chalk.magenta.bold('[sass]') + ' Compiling development CSS');
-
-    return gulp.src('www/scss/*.scss')
-        .pipe(sourcemaps.init())
-        .pipe(sass({
-            outputStyle: 'expanded',
-            sourceMap: true
-        }))
-        .on('error', function (error) {
-            beep();
-            console.log(chalk.magenta.bold('[sass]') + ' There was an issue compiling Sass'.bold.red);
-            console.error(error.message);
-            this.emit('end');
-        })
-        // Should be writing sourcemaps AFTER autoprefixer runs,
-        // but that breaks everything right now.
-        .pipe(sourcemaps.write())
-        .pipe(autoprefixer({
-            browsers: ['last 3 versions', 'ie 9']
-        }))
-        .pipe(gulp.dest('./www/css'))
-        .pipe(livereload());
-});
-
-gulp.task('sass:prod', function () {
-
-    console.log(chalk.magenta.bold('[sass]') + ' Compiling production CSS');
-
-    return gulp.src('www/scss/*.scss')
-
-        .pipe(sass({
-            outputStyle: 'compressed',
-            sourcemap: false
-        }))
-
-        .on('error', function (error) {
-            beep();
-            console.error(error);
-            this.emit('end');
-        })
-
-        .pipe(autoprefixer({
-            browsers: ['last 3 versions', 'ie 9']
-        }))
-
-        .pipe(gulp.dest('./www/css'));
-});
-
-gulp.task('lint', function() {
-
-    console.log(chalk.magenta.bold('[lint]') + ' Linting JavaScript files');
-
-    return gulp.src(['./**/*.js', '!./**/*.min.js', '!./static/components/**/*.js', '!./static/js/vendor/**/*.js', '!./node_modules/**/*.js'])
-        .pipe(jshint())
-        .pipe(jshint.reporter('jshint-stylish'));
-
-});
-
-gulp.task('iconify', function() {
-
-    console.log(chalk.magenta.bold('[iconify]') + ' Iconifying SVG icons');
-
-    iconify({
-        src: './www/img/icon-svg/**/*.svg',
-        pngOutput: './www/img/icons',
-        scssOutput: './www/scss/icons',
-        cssOutput:  './www/css'
-    });
-
-});
-
-gulp.task('iconify-sass-cleanup', ['iconify'], function () {
-
-    console.log(chalk.magenta.bold('[iconify-sass-cleanup]') + ' Cleaning up iconify\'s Sass mess');
-
-    return gulp.src('./www/scss/icons/icons*')
-        .pipe(rename(function (path) {
-            path.basename = ('_' + path.basename).replace('.', '-');
-        }))
-        .pipe(gulp.dest('./www/scss/icons'));
-
-});
-
-gulp.task('iconify-file-cleanup', ['iconify-sass-cleanup'], function () {
-
-    console.log(chalk.magenta.bold('[iconify-file-cleanup]') + ' Cleaning up iconify\'s mess');
-
-    del([
-        'www/css/icons*',
-        'www/scss/icons/icons*',
-        'www/scss/icons/_icons-fallback.scss',
-        'www/scss/icons/_icons-png.scss',
-        'www/img/icons'
-    ]);
-
-});
-
-gulp.task('ugilify', function() {
-
-    console.log(chalk.magenta.bold('[ugilify]') + ' Concatenating JavaScript files');
-
-    return gulp.src([
-            './static/components/jquery/dist/jquery.min.js',
-            './static/js/vendor/fontfaceobserver.js',
-            './static/js/jquery.unveil.js',
-            './static/js/main.js'
-        ])
-        .pipe(uglify('scripts.min.js'))
-        .pipe(gulp.dest('./static/js/'));
-});
-
 gulp.task('copy:views', function () {
 
     console.log(chalk.magenta.bold('[copy:views]') + ' Copying views to ./dist');
@@ -137,17 +24,6 @@ gulp.task('copy:views', function () {
     return gulp.src('./views/**/*.hbs', {base: './views'})
         .pipe(gulp.dest('./dist/views/'));
 
-});
-
-gulp.task('html-replace', ['ugilify', 'copy:views'], function() {
-
-    console.log(chalk.magenta.bold('[html-replace]') + ' Replacing some HTML');
-
-    return gulp.src('views/shared/_layout.hbs')
-        .pipe(htmlreplace({
-            'js': 'js/scripts.min.js'
-        }))
-        .pipe(gulp.dest('dist/views/shared/'));
 });
 
 gulp.task('critical', ['sass:prod'], function () {
@@ -165,7 +41,7 @@ gulp.task('critical', ['sass:prod'], function () {
                     if (err) {
                         throw new Error(err);
                     } else {
-                        fs.writeFileSync('./www/css/critical.css', output);
+                        fs.writeFileSync('./static/css/critical.css', output);
                     }
                 });
             }
@@ -174,14 +50,139 @@ gulp.task('critical', ['sass:prod'], function () {
 
 });
 
+gulp.task('html-replace', ['ugilify', 'copy:views'], function() {
+
+    console.log(chalk.magenta.bold('[html-replace]') + ' Replacing some HTML');
+
+    return gulp.src('views/shared/_layout.hbs')
+        .pipe(htmlreplace({
+            'js': 'js/scripts.min.js'
+        }))
+        .pipe(gulp.dest('dist/views/shared/'));
+});
+
+gulp.task('iconify', function() {
+
+    console.log(chalk.magenta.bold('[iconify]') + ' Iconifying SVG icons');
+
+    iconify({
+        src: './static/img/icon-svg/**/*.svg',
+        pngOutput: './static/img/icons',
+        scssOutput: './static/scss/icons',
+        cssOutput:  './static/css'
+    });
+
+});
+
+gulp.task('iconify-file-cleanup', ['iconify-sass-cleanup'], function () {
+
+    console.log(chalk.magenta.bold('[iconify-file-cleanup]') + ' Cleaning up iconify\'s mess');
+
+    del([
+        'static/css/icons*',
+        'static/scss/icons/icons*',
+        'static/scss/icons/_icons-fallback.scss',
+        'static/scss/icons/_icons-png.scss',
+        'static/img/icons'
+    ]);
+
+});
+
+gulp.task('iconify-sass-cleanup', ['iconify'], function () {
+
+    console.log(chalk.magenta.bold('[iconify-sass-cleanup]') + ' Cleaning up iconify\'s Sass mess');
+
+    return gulp.src('./static/scss/icons/icons*')
+        .pipe(rename(function (path) {
+            path.basename = ('_' + path.basename).replace('.', '-');
+        }))
+        .pipe(gulp.dest('./static/scss/icons'));
+
+});
+
+gulp.task('lint', function() {
+
+    console.log(chalk.magenta.bold('[lint]') + ' Linting JavaScript files');
+
+    return gulp.src(['./**/*.js', '!./**/*.min.js', '!./static/components/**/*.js', '!./static/js/vendor/**/*.js', '!./node_modules/**/*.js'])
+        .pipe(jshint())
+        .pipe(jshint.reporter('jshint-stylish'));
+
+});
+
+gulp.task('sass:dev', function () {
+
+    console.log(chalk.magenta.bold('[sass]') + ' Compiling development CSS');
+
+    return gulp.src('static/scss/*.scss')
+        .pipe(sourcemaps.init())
+        .pipe(sass({
+            outputStyle: 'expanded',
+            sourceMap: true
+        }))
+        .on('error', function (error) {
+            beep();
+            console.log(chalk.magenta.bold('[sass]') + ' There was an issue compiling Sass'.bold.red);
+            console.error(error.message);
+            this.emit('end');
+        })
+        // Should be writing sourcemaps AFTER autoprefixer runs,
+        // but that breaks everything right now.
+        .pipe(sourcemaps.write())
+        .pipe(autoprefixer({
+            browsers: ['last 3 versions', 'ie 9']
+        }))
+        .pipe(gulp.dest('./static/css'))
+        .pipe(livereload());
+});
+
+gulp.task('sass:prod', function () {
+
+    console.log(chalk.magenta.bold('[sass]') + ' Compiling production CSS');
+
+    return gulp.src('static/scss/*.scss')
+
+        .pipe(sass({
+            outputStyle: 'compressed',
+            sourcemap: false
+        }))
+
+        .on('error', function (error) {
+            beep();
+            console.error(error);
+            this.emit('end');
+        })
+
+        .pipe(autoprefixer({
+            browsers: ['last 3 versions', 'ie 9']
+        }))
+
+        .pipe(gulp.dest('./static/css'));
+});
+
+gulp.task('ugilify', function() {
+
+    console.log(chalk.magenta.bold('[ugilify]') + ' Concatenating JavaScript files');
+
+    return gulp.src([
+            './static/components/jquery/dist/jquery.min.js',
+            './static/js/vendor/fontfaceobserver.js',
+            './static/js/jquery.unveil.js',
+            './static/js/main.js',
+            './static/js/heart.js'
+        ])
+        .pipe(uglify('scripts.min.js'))
+        .pipe(gulp.dest('./static/js/'));
+});
+
 // Watch files for changes
 gulp.task('watch', function () {
 
     console.log(chalk.magenta.bold('[watch]') + ' Watching Sass files for changes');
 
     livereload.listen();
-    gulp.watch(['www/scss/**/*.scss'], ['sass:dev']);
-    gulp.watch(['./**/*.js', '!./www/components/**/*.js', '!./www/js/vendor/**/*.js', '!./node_modules/**/*.js'], ['lint']);
+    gulp.watch(['static/scss/**/*.scss'], ['sass:dev']);
+    gulp.watch(['./**/*.js', '!./static/components/**/*.js', '!./static/js/vendor/**/*.js', '!./node_modules/**/*.js'], ['lint']);
     gulp.watch(['./views/**/*.hbs'], ['copy:views']);
 
 });

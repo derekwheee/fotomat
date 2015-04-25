@@ -11,6 +11,7 @@ body {
     line-height: 1.5;
     color: #ddd;
     overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
 }
 
 .fonts-loaded body {

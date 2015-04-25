@@ -46,6 +46,7 @@
         background: rgba(black, 0.4);
 
         [class^='icon'] {
+            position: relative;
             display: block;
             font-size: 1.5em;
             color: tomato;
@@ -86,5 +87,33 @@
                 }
             }
         }
+
+        &.hearted .icon-heart-outlined:after {
+            content: "\e6b5";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            font-family: 'entypo';
+            speak: none;
+            font-style: normal;
+            font-weight: normal;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-size: 2em;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            animation: heartbeat 0.5s;
+            animation-fill-mode: forwards;
+        }
     }
+}
+
+@keyframes heartbeat {
+    0%   { opacity: 0; }
+    50%  { font-size: 0.5em; }
+    75%  { font-size: 1.5em; }
+    100% { opacity: 1; font-size: 1em; }
 }

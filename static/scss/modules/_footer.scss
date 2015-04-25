@@ -1,0 +1,33 @@
+.site-footer {
+    padding: 2em 1em;
+    background-color: #111;
+    color: #999;
+    text-align: center;
+
+    @include breakpoint(sm) {
+        padding: 8em;
+    }
+
+    .made-with-mario {
+        @extend .clearfix;
+        margin: 2em 0 1em;
+        color: #ddd;
+
+        .mario {
+            position: relative;
+            width: 3em;
+        }
+
+        .before,
+        .after,
+        .mario {
+            display: inline-block;
+            height: 2.3em;
+        }
+
+        .before,
+        .after {
+            line-height: 2.5;
+        }
+    }
+}

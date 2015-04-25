@@ -21,13 +21,14 @@
   },
   "homepage": "https://github.com/frxnz/fotomat",
   "dependencies": {
-    "express": "^4.12.3"
+    "express": "^4.12.3",
+    "gulp": "^3.8.11",
+    "bower": "^1.4.1"
   },
   "devDependencies": {
     "beepbeep": "^1.2.0",
     "colors": "^1.0.3",
     "del": "^1.1.1",
-    "gulp": "^3.8.11",
     "gulp-autoprefixer": "^2.1.0",
     "gulp-concat": "^2.5.2",
     "gulp-iconify": "^0.3.0",

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "postinstall": "bower install && gulp build"
+    "postinstall": "bower install"
   },
   "repository": {
     "type": "git",
@@ -22,7 +22,6 @@
   "homepage": "https://github.com/frxnz/fotomat",
   "dependencies": {
     "express": "^4.12.3",
-    "gulp": "^3.8.11",
     "bower": "^1.4.1"
   },
   "devDependencies": {

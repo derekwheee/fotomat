@@ -1,0 +1,90 @@
+.gif-tiles {
+    @extend .clearfix;
+    padding: 0.5em;
+
+    .gif-tile {
+        position: relative;
+        width: calc(100% - 1em);
+        margin: 0.5em;
+        float: left;
+
+        @include breakpoint (sm) {
+            width: calc(50% - 1em);
+        }
+
+        @include breakpoint (md) {
+            width: calc(33% - 1em);
+        }
+
+        @include breakpoint (lg) {
+            width: calc(25% - 1em);
+        }
+    }
+
+    img {
+        display: block;
+        width: 100%;
+    }
+
+    .icon-resize-full-screen {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 0.5em;
+        background: rgba(black, 0.5);
+        font-size: 1.5em;
+        color: white;
+    }
+
+    .gif-like {
+        @extend .clearfix;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 0.5em;
+        background: rgba(black, 0.4);
+
+        [class^='icon'] {
+            display: block;
+            font-size: 1.5em;
+            color: tomato;
+            float: left;
+        }
+
+        .gif-like-count {
+            position: relative;
+            top: -1px;
+            margin: 0 0.5em;
+            float: left;
+        }
+
+        button {
+            position: relative;
+            display: block;
+            padding: 0;
+            margin: 0;
+            border: none;
+            background: transparent;
+            text-transform: uppercase;
+            color: tomato;
+            float: left;
+
+            &:focus {
+                outline: none;
+            }
+
+            &.gif-share {
+                top: -1px;
+                padding: 0 0.5em;
+                margin: 0 0.5em;
+                border: 1px solid transparent;
+
+                &:focus {
+                    outline: none;
+                    border: 1px solid tomato;
+                }
+            }
+        }
+    }
+}

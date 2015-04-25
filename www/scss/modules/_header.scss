@@ -1,0 +1,85 @@
+header {
+    position: relative;
+    padding: 1em;
+    background: #333;
+
+    .dirigo-link {
+        @extend %sans-serif;
+        margin: 0;
+        font-size: 1em;
+        font-weight: 200;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: #999;
+
+
+        strong {
+            font-weight: inherit;
+            color: #5ec8d5;
+        }
+
+        small {
+            font-size: 0.8em;
+            color: #999;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .go-to {
+            display: inline-block;
+            max-width: 0;
+            height: 0.9rem;
+            overflow: hidden;
+            color: #999;
+            opacity: 0;
+            transition: max-width 0.3s ease-in-out,
+                        opacity 0.3s ease-in-out;
+        }
+
+        &:hover {
+            small {
+                color: #5ec8d5;
+            }
+
+            .go-to {
+                max-width: 5em;
+                opacity: 1;
+            }
+        }
+    }
+
+    h1 {
+        width: 90%;
+        max-width: 9em;
+        margin: 0.5em auto calc(0.5em + 1rem);
+        font-size: 12vw;
+        line-height: 1;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: #bada55;
+
+        &:first-line {
+            color: #ccc;
+        }
+
+        @include breakpoint(md) {
+            font-size: 7.5em;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        small {
+            line-height: 0.5;
+            font-size: 0.4em;
+            color: #aaa;
+        }
+
+        strong {
+            color: #5ec8d5;
+        }
+    }
+}
+
+

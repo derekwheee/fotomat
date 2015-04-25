@@ -1,17 +1,18 @@
 var gulp         = require('gulp'),
+    jshint       = require('gulp-jshint'),
     sass         = require('gulp-sass'),
     sourcemaps   = require('gulp-sourcemaps'),
-    beep         = require('beepbeep'),
     autoprefixer = require('gulp-autoprefixer'),
     iconify      = require('gulp-iconify'),
     rename       = require('gulp-rename'),
+    livereload   = require('gulp-livereload'),
+    beep         = require('beepbeep'),
     del          = require('del'),
-    colors       = require('colors'),
-    livereload   = require('gulp-livereload');
+    chalk        = require('chalk');
 
 gulp.task('sass:dev', function () {
 
-    console.log('[sass]'.bold.magenta + ' Compiling development CSS');
+    console.log(chalk.magenta.bold('[sass]') + ' Compiling development CSS');
 
     return gulp.src('www/scss/*.scss')
         .pipe(sourcemaps.init())
@@ -21,7 +22,7 @@ gulp.task('sass:dev', function () {
         }))
         .on('error', function (error) {
             beep();
-            console.log('[sass]'.bold.magenta + ' There was an issue compiling Sass'.bold.red);
+            console.log(chalk.magenta.bold('[sass]') + ' There was an issue compiling Sass'.bold.red);
             console.error(error.message);
             this.emit('end');
         })
@@ -37,7 +38,7 @@ gulp.task('sass:dev', function () {
 
 gulp.task('sass:prod', function () {
 
-    console.log('[sass]'.bold.magenta + ' Compiling production CSS');
+    console.log(chalk.magenta.bold('[sass]') + ' Compiling production CSS');
 
     return gulp.src('www/scss/*.scss')
 
@@ -59,9 +60,19 @@ gulp.task('sass:prod', function () {
         .pipe(gulp.dest('./www/css'));
 });
 
+gulp.task('lint', function() {
+
+    console.log(chalk.magenta.bold('[lint]') + ' Linting JavaScript files');
+
+    return gulp.src(['./**/*.js', '!./www/components/**/*.js', '!./node_modules/**/*.js'])
+        .pipe(jshint())
+        .pipe(jshint.reporter('jshint-stylish'));
+
+});
+
 gulp.task('iconify', function() {
 
-    console.log('[iconify]'.bold.magenta + ' Iconifying SVG icons');
+    console.log(chalk.magenta.bold('[iconify]') + ' Iconifying SVG icons');
 
     iconify({
         src: './www/img/icon-svg/**/*.svg',
@@ -74,19 +85,19 @@ gulp.task('iconify', function() {
 
 gulp.task('iconify-sass-cleanup', ['iconify'], function () {
 
-    console.log('[iconify-sass-cleanup]'.bold.magenta + ' Cleaning up iconify\'s Sass mess');
+    console.log(chalk.magenta.bold('[iconify-sass-cleanup]') + ' Cleaning up iconify\'s Sass mess');
 
-    return gulp.src("./www/scss/icons/icons*")
+    return gulp.src('./www/scss/icons/icons*')
         .pipe(rename(function (path) {
             path.basename = ('_' + path.basename).replace('.', '-');
         }))
-        .pipe(gulp.dest("./www/scss/icons"));
+        .pipe(gulp.dest('./www/scss/icons'));
 
 });
 
 gulp.task('iconify-file-cleanup', ['iconify-sass-cleanup'], function () {
 
-    console.log('[iconify-file-cleanup]'.bold.magenta + ' Cleaning up iconify\'s mess');
+    console.log(chalk.magenta.bold('[iconify-file-cleanup]') + ' Cleaning up iconify\'s mess');
 
     del([
         'www/css/icons*',
@@ -101,10 +112,11 @@ gulp.task('iconify-file-cleanup', ['iconify-sass-cleanup'], function () {
 // Watch files for changes
 gulp.task('watch', function () {
 
-    console.log('[watch]'.bold.magenta + ' Watching Sass files for changes');
+    console.log(chalk.magenta.bold('[watch]') + ' Watching Sass files for changes');
 
     livereload.listen();
     gulp.watch(['www/scss/**/*.scss'], ['sass:dev']);
+    gulp.watch(['./**/*.js', '!./www/components/**/*.js', '!./node_modules/**/*.js'], ['lint']);
 
 });
 
@@ -112,9 +124,9 @@ gulp.task('watch', function () {
 gulp.task('icons', ['iconify-file-cleanup']);
 
 // Compile Sass and watch for file changes
-gulp.task('dev', ['sass:dev', 'watch'], function () {
-    return console.log('\n[dev]'.bold.magenta + ' Ready for you to start doing things\n'.bold.green);
+gulp.task('dev', ['lint', 'sass:dev', 'watch'], function () {
+    return console.log(chalk.magenta.bold('\n[dev]') + chalk.bold.green(' Ready for you to start doing things\n'));
 });
 
 // Compile production Sass
-gulp.task('build', ['sass:prod']);
+gulp.task('build', ['sass:prod', 'icons', 'lint']);

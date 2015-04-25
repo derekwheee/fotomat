@@ -1,0 +1,18 @@
+* {
+    box-sizing: inherit;
+}
+
+html,
+body {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    background: #444;
+    line-height: 1.5;
+    color: #ddd;
+    overflow-x: hidden;
+}
+
+.fonts-loaded body {
+    @extend %sans-serif;
+}

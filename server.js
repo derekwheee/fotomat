@@ -1,6 +1,7 @@
 var express = require('express'),
     exphbs  = require('express-handlebars'),
     mongoose = require('mongoose'),
+    fs = require('fs'),
     app = express();
 
 mongoose.connect(process.env.MONGOLAB_URI);
@@ -79,23 +80,31 @@ db.once('open', function callback () {
 
 });
 
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
-app.set('view engine', 'handlebars');
+var hbs = exphbs.create({
+    defaultLayout: '_layout',
+    layoutsDir: 'dist/views/shared/',
+    partialsDir: 'dist/views/shared/partials/',
+    extname: '.hbs'
+});
+
+app.engine('hbs', hbs.engine);
+app.set('view engine', 'hbs');
 app.set('port', (process.env.PORT || 3000));
 
 app.get('/', function (req, res) {
 
     Gif.find({}, function(err, gifs) {
 
-        var data = gifs || [];
+        var data = gifs || [],
+            criticalCss = process.env.NODE_ENV === 'production' ? fs.readFileSync('./static/css/critical.css') : '/* This is empty in dev */';
 
-        res.render('home', {title: 'HOME', data : data});
+        res.render('../dist/views/home', {title: 'HOME', data : data, criticalCss: criticalCss});
 
     });
 
 });
 
-app.use(express.static(__dirname + '/www'));
+app.use(express.static(__dirname + '/static'));
 
 app.listen(app.get('port'), function () {
 

@@ -1,0 +1,15 @@
+<div class="gif-tiles">
+    {{#data}}
+        <div class="gif-tile" data-id="{{_id}}">
+            <i class="icon-resize-full-screen"></i>
+            <img src="/img/spacer.gif" data-src="{{paths.preview}}">
+            <div class="gif-like">
+                <button class="icon-heart-outlined"></button>
+                <div class="gif-like-count">
+                    {{hearts}}
+                </div>
+                <button class="gif-share">Share</button>
+            </div>
+        </div>
+    {{/data}}
+</div>

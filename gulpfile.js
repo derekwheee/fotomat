@@ -6,9 +6,16 @@ var gulp         = require('gulp'),
     iconify      = require('gulp-iconify'),
     rename       = require('gulp-rename'),
     livereload   = require('gulp-livereload'),
+    htmlreplace  = require('gulp-html-replace'),
+    uglify       = require('gulp-uglifyjs'),
     beep         = require('beepbeep'),
     del          = require('del'),
-    chalk        = require('chalk');
+    chalk        = require('chalk'),
+    criticalcss  = require('criticalcss'),
+    fs           = require('fs'),
+    tmpDir       = require('os').tmpdir(),
+    request      = require('request'),
+    path         = require( 'path' );
 
 gulp.task('sass:dev', function () {
 
@@ -64,7 +71,7 @@ gulp.task('lint', function() {
 
     console.log(chalk.magenta.bold('[lint]') + ' Linting JavaScript files');
 
-    return gulp.src(['./**/*.js', '!./www/components/**/*.js', '!./node_modules/**/*.js'])
+    return gulp.src(['./**/*.js', '!./**/*.min.js', '!./static/components/**/*.js', '!./static/js/vendor/**/*.js', '!./node_modules/**/*.js'])
         .pipe(jshint())
         .pipe(jshint.reporter('jshint-stylish'));
 
@@ -109,6 +116,64 @@ gulp.task('iconify-file-cleanup', ['iconify-sass-cleanup'], function () {
 
 });
 
+gulp.task('ugilify', function() {
+
+    console.log(chalk.magenta.bold('[ugilify]') + ' Concatenating JavaScript files');
+
+    return gulp.src([
+            './static/components/jquery/dist/jquery.min.js',
+            './static/js/vendor/fontfaceobserver.js',
+            './static/js/jquery.unveil.js',
+            './static/js/main.js'
+        ])
+        .pipe(uglify('scripts.min.js'))
+        .pipe(gulp.dest('./static/js/'));
+});
+
+gulp.task('copy:views', function () {
+
+    console.log(chalk.magenta.bold('[copy:views]') + ' Copying views to ./dist');
+
+    return gulp.src('./views/**/*.hbs', {base: './views'})
+        .pipe(gulp.dest('./dist/views/'));
+
+});
+
+gulp.task('html-replace', ['ugilify', 'copy:views'], function() {
+
+    console.log(chalk.magenta.bold('[html-replace]') + ' Replacing some HTML');
+
+    return gulp.src('views/shared/_layout.hbs')
+        .pipe(htmlreplace({
+            'js': 'js/scripts.min.js'
+        }))
+        .pipe(gulp.dest('dist/views/shared/'));
+});
+
+gulp.task('critical', ['sass:prod'], function () {
+
+    console.log(chalk.magenta.bold('[critical]') + ' Generating critical CSS');
+
+    var cssUrl = 'http://localhost:5000/css/main.css';
+    var cssPath = path.join( tmpDir, 'main.css' );
+    request(cssUrl).pipe(fs.createWriteStream(cssPath)).on('close', function() {
+        criticalcss.getRules(cssPath, function(err, output) {
+            if (err) {
+                throw new Error(err);
+            } else {
+                criticalcss.findCritical('http://localhost:5000/', { rules: JSON.parse(output) }, function(err, output) {
+                    if (err) {
+                        throw new Error(err);
+                    } else {
+                        fs.writeFileSync('./www/css/critical.css', output);
+                    }
+                });
+            }
+        });
+    });
+
+});
+
 // Watch files for changes
 gulp.task('watch', function () {
 
@@ -116,7 +181,8 @@ gulp.task('watch', function () {
 
     livereload.listen();
     gulp.watch(['www/scss/**/*.scss'], ['sass:dev']);
-    gulp.watch(['./**/*.js', '!./www/components/**/*.js', '!./node_modules/**/*.js'], ['lint']);
+    gulp.watch(['./**/*.js', '!./www/components/**/*.js', '!./www/js/vendor/**/*.js', '!./node_modules/**/*.js'], ['lint']);
+    gulp.watch(['./views/**/*.hbs'], ['copy:views']);
 
 });
 
@@ -124,9 +190,9 @@ gulp.task('watch', function () {
 gulp.task('icons', ['iconify-file-cleanup']);
 
 // Compile Sass and watch for file changes
-gulp.task('dev', ['lint', 'sass:dev', 'watch'], function () {
+gulp.task('dev', ['lint', 'sass:dev', 'copy:views', 'watch'], function () {
     return console.log(chalk.magenta.bold('\n[dev]') + chalk.bold.green(' Ready for you to start doing things\n'));
 });
 
 // Compile production Sass
-gulp.task('build', ['sass:prod', 'icons', 'lint']);
+gulp.task('build', ['critical', 'html-replace', 'icons', 'lint']);

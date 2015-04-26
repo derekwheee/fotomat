@@ -11,6 +11,16 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+        <meta property="og:title" content="#d3summit" />
+        <meta property="og:type" content="website" />
+        {{#if id}}
+            <meta property="og:url" content="https://fotomat.herokuapp.com/{{id}}/" />
+            <meta property="og:image" content="{{paths.preview}}" />
+        {{else}}
+            <meta property="og:url" content="https://fotomat.herokuapp.com/" />
+            <meta property="og:image" content="http://ia.media-imdb.com/images/rock.jpg" />
+        {{/if}}
+
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
         <link rel="stylesheet" href="css/main.css">

@@ -26,43 +26,43 @@ db.once('open', function callback () {
     var seedData = [
         new Gif({
             paths: {
-                preview: '/img/gifs/animation-adrian-preview.gif',
-                high_resolution: '/img/gifs/animation-adrian.gif'
+                preview: 'https://fotomat.herokuapp.com/img/gifs/animation-adrian-preview.gif',
+                high_resolution: 'https://fotomat.herokuapp.com/img/gifs/animation-adrian.gif'
             },
             hearts: 0
         }),
         new Gif({
             paths: {
-                preview: '/img/gifs/animation-arash-preview.gif',
-                high_resolution: '/img/gifs/animation-arash.gif'
+                preview: 'https://fotomat.herokuapp.com/img/gifs/animation-arash-preview.gif',
+                high_resolution: 'https://fotomat.herokuapp.com/img/gifs/animation-arash.gif'
             },
             hearts: 0
         }),
         new Gif({
             paths: {
-                preview: '/img/gifs/animation-jamie-preview.gif',
-                high_resolution: '/img/gifs/animation-jamie.gif'
+                preview: 'https://fotomat.herokuapp.com/img/gifs/animation-jamie-preview.gif',
+                high_resolution: 'https://fotomat.herokuapp.com/img/gifs/animation-jamie.gif'
             },
             hearts: 0
         }),
         new Gif({
             paths: {
-                preview: '/img/gifs/animation-chad-preview.gif',
-                high_resolution: '/img/gifs/animation-chad.gif'
+                preview: 'https://fotomat.herokuapp.com/img/gifs/animation-chad-preview.gif',
+                high_resolution: 'https://fotomat.herokuapp.com/img/gifs/animation-chad.gif'
             },
             hearts: 0
         }),
         new Gif({
             paths: {
-                preview: '/img/gifs/animation-chad-creepy-preview.gif',
-                high_resolution: '/img/gifs/animation-chad-creepy.gif'
+                preview: 'https://fotomat.herokuapp.com/img/gifs/animation-chad-creepy-preview.gif',
+                high_resolution: 'https://fotomat.herokuapp.com/img/gifs/animation-chad-creepy.gif'
             },
             hearts: 0
         }),
         new Gif({
             paths: {
-                preview: '/img/gifs/animationadrian-spin-preview.gif',
-                high_resolution: '/img/gifs/animationadrian-spin.gif'
+                preview: 'https://fotomat.herokuapp.com/img/gifs/animationadrian-spin-preview.gif',
+                high_resolution: 'https://fotomat.herokuapp.com/img/gifs/animationadrian-spin.gif'
             },
             hearts: 0
         })
@@ -97,13 +97,16 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+app.use(express.static(__dirname + '/static'));
+
 app.get('/', function (req, res) {
+
+    var data,
+        criticalCss = process.env.NODE_ENV === 'production' ? fs.readFileSync('./static/css/critical.css') : '/* This is empty in dev */';
 
     Gif.find({}, function(err, gifs) {
 
-        var data = gifs || [],
-            criticalCss = process.env.NODE_ENV === 'production' ? fs.readFileSync('./static/css/critical.css') : '/* This is empty in dev */';
-
+        data = gifs || [];
         res.render('../dist/views/home', {title: 'HOME', data : data, criticalCss: criticalCss});
 
     });
@@ -112,12 +115,23 @@ app.get('/', function (req, res) {
 
 app.get('/:id', function (req, res) {
 
+    var data,
+        criticalCss = process.env.NODE_ENV === 'production' ? fs.readFileSync('./static/css/critical.css') : '/* This is empty in dev */';
+
     Gif.find({}, function(err, gifs) {
 
-        var data = gifs || [],
-            criticalCss = process.env.NODE_ENV === 'production' ? fs.readFileSync('./static/css/critical.css') : '/* This is empty in dev */';
+        data = gifs || [];
 
-        res.render('../dist/views/home', {title: 'HOME', data : data, criticalCss: criticalCss});
+        Gif.findById(req.params.id, function (err, gif) {
+
+            try {
+                res.render('../dist/views/home', {title: 'HOME', id : gif._id, paths : gif.paths, data : data, criticalCss: criticalCss});
+            } catch (err) {
+                res.status(404).render('../dist/views/404', {title: '404'});
+            }
+
+        });
+
 
     });
 
@@ -143,8 +157,6 @@ app.post('/api/heart', function (req, res) {
 
     });
 });
-
-app.use(express.static(__dirname + '/static'));
 
 app.listen(app.get('port'), function () {
 

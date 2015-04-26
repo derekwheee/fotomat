@@ -17,3 +17,9 @@ body {
 .fonts-loaded body {
     @extend %sans-serif;
 }
+
+.container {
+    width: 90%;
+    max-width: 50em;
+    margin: 0 auto 5em;
+}

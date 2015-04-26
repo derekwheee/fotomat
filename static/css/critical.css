@@ -1,4 +1,4 @@
-.fonts-loaded body, header .dirigo-link{ font-family: 'Source Sans Pro', sans-serif; }
+Console output: The "fb-root" div has not been created, auto-creating.fonts-loaded body, header .dirigo-link{ font-family: 'Source Sans Pro', sans-serif; }
 [class^="icon-"]{ font-family: entypo; speak: none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; line-height: 1; -webkit-font-smoothing: antialiased; }
 .icon-resize-full-screen::before{ content: ; }
 .icon-heart-outlined::before{ content: ; }
@@ -15,7 +15,7 @@ button{ overflow-x: visible; overflow-y: visible; }
 button{ text-transform: none; }
 button{ -webkit-appearance: button; cursor: pointer; }
 html{ color: rgb(34, 34, 34); font-size: 1em; line-height: 1.4; }
- img{ vertical-align: middle; }
+ iframe, img{ vertical-align: middle; }
  .gif-tiles::before, .gif-tiles .gif-like::before, .gif-tiles::after, .gif-tiles .gif-like::after{ content: ' '; display: table; }
  .gif-tiles::after, .gif-tiles .gif-like::after{ clear: both; }
 @media print{
@@ -57,6 +57,6 @@ header h1 a{ text-decoration: none; color: inherit; }
 .gif-tiles .gif-like .gif-like-count{ position: relative; top: -1px; margin-top: 0px; margin-right: 0.5em; margin-bottom: 0px; margin-left: 0.5em; float: left; }
 .gif-tiles .gif-like button{ position: relative; display: block; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; border-width: initial; border-color: initial; background-image: initial; background-attachment: initial; background-origin: initial; background-clip: initial; background-color: transparent; text-transform: uppercase; color: rgb(255, 99, 71); float: left; background-position: initial initial; background-repeat: initial initial; }
 .gif-tiles .gif-like button.gif-share{ padding-top: 0px; padding-right: 0.5em; padding-bottom: 0px; padding-left: 0.5em; margin-top: 0px; margin-right: 0.5em; margin-bottom: 0px; margin-left: 0.5em; }
-.gif-tiles .gif-share-dest{ position: absolute; left: 0.7em; background-image: initial; background-attachment: initial; background-origin: initial; background-clip: initial; background-color: rgb(255, 99, 71); -webkit-transform: translateY(6em); opacity: 0; background-position: initial initial; background-repeat: initial initial; }
+.gif-tiles .gif-share-dest{ position: absolute; left: 0.4em; background-image: initial; background-attachment: initial; background-origin: initial; background-clip: initial; background-color: rgb(255, 99, 71); -webkit-transform: translateY(6em); opacity: 0; background-position: initial initial; background-repeat: initial initial; }
 .gif-tiles .gif-share-dest::after{ content: ''; position: absolute; top: 100%; display: block; border-right-width: 0.5em; border-bottom-width: 0.5em; border-left-width: 0.5em; border-right-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-color: transparent; border-bottom-color: transparent; border-left-color: transparent; border-top-width: 0.5em; border-top-style: solid; border-top-color: rgb(255, 99, 71); }
 .gif-tiles .gif-share-dest a{ display: block; padding-top: 0.5em; padding-right: 1em; padding-bottom: 0.5em; padding-left: 1em; float: left; }

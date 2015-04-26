@@ -50,7 +50,7 @@ gulp.task('critical', ['sass:prod'], function () {
 
 });
 
-gulp.task('html-replace', ['ugilify', 'copy:views'], function() {
+gulp.task('html-replace', ['uglify', 'copy:views'], function() {
 
     console.log(chalk.magenta.bold('[html-replace]') + ' Replacing some HTML');
 
@@ -160,15 +160,16 @@ gulp.task('sass:prod', function () {
         .pipe(gulp.dest('./static/css'));
 });
 
-gulp.task('ugilify', function() {
+gulp.task('uglify', function() {
 
-    console.log(chalk.magenta.bold('[ugilify]') + ' Concatenating JavaScript files');
+    console.log(chalk.magenta.bold('[uglify]') + ' Concatenating JavaScript files');
 
     return gulp.src([
             './static/components/jquery/dist/jquery.min.js',
             './static/js/vendor/fontfaceobserver.js',
             './static/js/jquery.unveil.js',
             './static/js/main.js',
+            './static/js/share.js',
             './static/js/heart.js'
         ])
         .pipe(uglify('scripts.min.js'))

@@ -57,8 +57,29 @@
         <script src="/js/vendor/fontfaceobserver.js"></script>
         <script src="/js/jquery.unveil.js"></script>
         <script src="/js/main.js"></script>
+        <script src="/js/share.js"></script>
         <script src="/js/heart.js"></script>
         <!-- endbuild -->
+
+        <script type="text/javascript" async src="//platform.twitter.com/widgets.js"></script>
+
+        <script>
+            window.fbAsyncInit = function() {
+                FB.init({
+                    appId      : '1567619723512810',
+                    xfbml      : true,
+                    version    : 'v2.3'
+                });
+            };
+
+            (function(d, s, id){
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) {return;}
+                js = d.createElement(s); js.id = id;
+                js.src = "//connect.facebook.net/en_US/sdk.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+        </script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>

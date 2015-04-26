@@ -1,6 +1,7 @@
 var express = require('express'),
     exphbs  = require('express-handlebars'),
     mongoose = require('mongoose'),
+    bodyParser = require('body-parser'),
     fs = require('fs'),
     app = express();
 
@@ -91,6 +92,11 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('port', (process.env.PORT || 3000));
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
 app.get('/', function (req, res) {
 
     Gif.find({}, function(err, gifs) {
@@ -102,6 +108,40 @@ app.get('/', function (req, res) {
 
     });
 
+});
+
+app.get('/:id', function (req, res) {
+
+    Gif.find({}, function(err, gifs) {
+
+        var data = gifs || [],
+            criticalCss = process.env.NODE_ENV === 'production' ? fs.readFileSync('./static/css/critical.css') : '/* This is empty in dev */';
+
+        res.render('../dist/views/home', {title: 'HOME', data : data, criticalCss: criticalCss});
+
+    });
+
+});
+
+app.post('/api/heart', function (req, res) {
+    var id = req.body.id,
+        action = req.body.action;
+
+    Gif.findById(id, function (err, gif) {
+
+        if (err) {
+            res.send({ success: false, error: err });
+        }
+
+        gif.hearts = action === 'heart' ? gif.hearts + 1 : gif.hearts - 1;
+        gif.save(function (err) {
+            if (err) {
+                res.send({ success: false, error: err });
+            }
+            res.send({ success: true, hearts: gif.hearts });
+        });
+
+    });
 });
 
 app.use(express.static(__dirname + '/static'));

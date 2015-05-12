@@ -106,7 +106,7 @@ app.get('/', function (req, res) {
 
     Gif.find({}, function(err, gifs) {
 
-        data = gifs || [];
+        data = gifs.reverse() || [];
         res.render('../dist/views/home', {title: 'HOME', data : data, criticalCss: criticalCss});
 
     });

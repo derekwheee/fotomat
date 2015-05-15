@@ -168,11 +168,13 @@ server.listen(app.get('port'));
 ws = new WebSocketServer({server: server})
 console.log("websocket server created")
 
+
+
 ws.on("connection", function(socket) {
 
     console.log("websocket connection open");
 
-    ws.on('message', function(data, flags) {
+    socket.on('message', function(data, flags) {
         var parsed = JSON.parse(data);
 
         console.log(parsed);

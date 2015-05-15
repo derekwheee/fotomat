@@ -82,6 +82,12 @@
                 js.src = "//connect.facebook.net/en_US/sdk.js";
                 fjs.parentNode.insertBefore(js, fjs);
             }(document, 'script', 'facebook-jssdk'));
+
+            var host = location.origin.replace(/^http/, 'ws')
+            var ws = new WebSocket(host);
+            ws.onmessage = function (event) {
+                console.log(event);
+            };
         </script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->

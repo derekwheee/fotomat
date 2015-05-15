@@ -1,9 +1,13 @@
-var express = require('express'),
-    exphbs  = require('express-handlebars'),
-    mongoose = require('mongoose'),
-    bodyParser = require('body-parser'),
-    fs = require('fs'),
-    app = express();
+var WebSocketServer = require("ws").Server
+var http = require('http');
+var express = require('express');
+var exphbs  = require('express-handlebars');
+var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
+var fs = require('fs');
+var app = express();
+var server;
+var ws;
 
 mongoose.connect(process.env.MONGOLAB_URI);
 
@@ -158,8 +162,21 @@ app.post('/api/heart', function (req, res) {
     });
 });
 
-app.listen(app.get('port'), function () {
+server = http.createServer(app);
+server.listen(app.get('port'));
 
-  console.log('Node app is running at localhost:' + app.get('port'));
+ws = new WebSocketServer({server: server})
+console.log("websocket server created")
 
-});
+ws.on("connection", function(socket) {
+  var id = setInterval(function() {
+    socket.send(JSON.stringify(new Date()), function() {  })
+  }, 1000)
+
+  console.log("websocket connection open")
+
+  socket.on("close", function() {
+    console.log("websocket connection close")
+    clearInterval(id)
+  })
+})

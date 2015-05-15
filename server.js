@@ -169,14 +169,26 @@ ws = new WebSocketServer({server: server})
 console.log("websocket server created")
 
 ws.on("connection", function(socket) {
-  var id = setInterval(function() {
-    socket.send(JSON.stringify(new Date()), function() {  })
-  }, 1000)
 
-  console.log("websocket connection open")
+    console.log("websocket connection open");
 
-  socket.on("close", function() {
-    console.log("websocket connection close")
-    clearInterval(id)
-  })
+    ws.on('message', function(data, flags) {
+        var parsed = JSON.parse(data);
+
+        console.log(parsed);
+
+        if (parsed.type === 'RFID') {
+            ws.broadcast(data);
+        }
+    });
+
+    socket.on("close", function() {
+        console.log("websocket connection close")
+    });
 })
+
+ws.broadcast = function broadcast(data) {
+    ws.clients.forEach(function each(client) {
+        client.send(data);
+    });
+};

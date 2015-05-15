@@ -83,8 +83,7 @@
                 fjs.parentNode.insertBefore(js, fjs);
             }(document, 'script', 'facebook-jssdk'));
 
-            var host = location.origin.replace(/^http/, 'ws')
-            var ws = new WebSocket(host);
+            var ws = new WebSocket('ws://fotomat.herokuapp.com');
             ws.onmessage = function (event) {
                 console.log(event);
             };

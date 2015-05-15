@@ -177,8 +177,6 @@ ws.on("connection", function(socket) {
     socket.on('message', function(data, flags) {
         var parsed = JSON.parse(data);
 
-        console.log(parsed);
-
         if (parsed.type === 'RFID') {
             ws.broadcast(data);
         }
@@ -190,6 +188,7 @@ ws.on("connection", function(socket) {
 })
 
 ws.broadcast = function broadcast(data) {
+    console.log('Clients connected:', ws.clients.length);
     ws.clients.forEach(function each(client) {
         client.send(data);
     });

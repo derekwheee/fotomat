@@ -10,12 +10,7 @@ var gulp         = require('gulp'),
     uglify       = require('gulp-uglifyjs'),
     beep         = require('beepbeep'),
     del          = require('del'),
-    chalk        = require('chalk'),
-    criticalcss  = require('criticalcss'),
-    fs           = require('fs'),
-    tmpDir       = require('os').tmpdir(),
-    request      = require('request'),
-    path         = require( 'path' );
+    chalk        = require('chalk');
 
 gulp.task('copy:views', function () {
 
@@ -23,30 +18,6 @@ gulp.task('copy:views', function () {
 
     return gulp.src('./views/**/*.hbs', {base: './views'})
         .pipe(gulp.dest('./dist/views/'));
-
-});
-
-gulp.task('critical', ['sass:prod'], function () {
-
-    console.log(chalk.magenta.bold('[critical]') + ' Generating critical CSS');
-
-    var cssUrl = 'http://localhost:5000/css/main.css';
-    var cssPath = path.join( tmpDir, 'main.css' );
-    request(cssUrl).pipe(fs.createWriteStream(cssPath)).on('close', function() {
-        criticalcss.getRules(cssPath, function(err, output) {
-            if (err) {
-                throw new Error(err);
-            } else {
-                criticalcss.findCritical('http://localhost:5000/', { rules: JSON.parse(output) }, function(err, output) {
-                    if (err) {
-                        throw new Error(err);
-                    } else {
-                        fs.writeFileSync('./static/css/critical.css', output);
-                    }
-                });
-            }
-        });
-    });
 
 });
 
@@ -199,4 +170,4 @@ gulp.task('dev', ['lint', 'sass:dev', 'copy:views', 'watch'], function () {
 
 // Compile production Sass
 // Run `foreman start` before building
-gulp.task('build', ['critical', 'html-replace', 'icons', 'lint']);
+gulp.task('build', ['html-replace', 'icons', 'lint']);

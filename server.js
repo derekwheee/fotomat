@@ -105,13 +105,12 @@ app.use(express.static(__dirname + '/static'));
 
 app.get('/', function (req, res) {
 
-    var data,
-        criticalCss = process.env.NODE_ENV === 'production' ? fs.readFileSync('./static/css/critical.css') : '/* This is empty in dev */';
+    var data;
 
     Gif.find({}, function(err, gifs) {
 
         data = gifs.reverse() || [];
-        res.render('../dist/views/home', {title: 'HOME', data : data, criticalCss: criticalCss});
+        res.render('../dist/views/home', {title: 'HOME', data : data});
 
     });
 
@@ -119,8 +118,7 @@ app.get('/', function (req, res) {
 
 app.get('/:id', function (req, res) {
 
-    var data,
-        criticalCss = process.env.NODE_ENV === 'production' ? fs.readFileSync('./static/css/critical.css') : '/* This is empty in dev */';
+    var data;
 
     Gif.find({}, function(err, gifs) {
 
@@ -130,7 +128,7 @@ app.get('/:id', function (req, res) {
             if (err) {
                 res.status(404).render('../dist/views/404', {title: '404'});
             } else {
-                res.status(200).render('../dist/views/home', {title: 'GIF', gif : gif, data : data, criticalCss: criticalCss});
+                res.status(200).render('../dist/views/home', {title: 'GIF', gif : gif, data : data});
             }
 
         });

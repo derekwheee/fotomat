@@ -29,8 +29,8 @@ function debounce(func, wait, immediate) {
 
 $(function() {
 
-    var scrollHandler = debounce(function() {
-        $('img').each(function () {
+    var imageHider = debounce(function() {
+        $('.gif-tile:not(".featured") img').each(function () {
             if (!$.inViewport($(this), 800)) {
                 $(this).hide();
             } else {
@@ -43,13 +43,6 @@ $(function() {
 
     $('.gif-tile img').unveil(100);
 
-    $('img').each(function () {
-        if (!$.inViewport($(this))) {
-            $(this).hide();
-        } else {
-            $(this).show();
-        }
-    });
-
-    $('body').scroll(scrollHandler);
+    $('body').scroll(imageHider);
+    $(window).resize(imageHider);
 });

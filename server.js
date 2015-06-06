@@ -127,10 +127,10 @@ app.get('/:id', function (req, res) {
         data = gifs.reverse() || [];
         Gif.findById(req.params.id, function (err, gif) {
 
-            try {
-                res.render('../dist/views/home', {title: 'GIF', gif : gif, data : data, criticalCss: criticalCss});
-            } catch (err) {
+            if (err) {
                 res.status(404).render('../dist/views/404', {title: '404'});
+            } else {
+                res.status(200).render('../dist/views/home', {title: 'GIF', gif : gif, data : data, criticalCss: criticalCss});
             }
 
         });

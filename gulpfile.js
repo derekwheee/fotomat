@@ -1,16 +1,16 @@
-var gulp         = require('gulp'),
-    jshint       = require('gulp-jshint'),
-    sass         = require('gulp-sass'),
-    sourcemaps   = require('gulp-sourcemaps'),
-    autoprefixer = require('gulp-autoprefixer'),
-    iconify      = require('gulp-iconify'),
-    rename       = require('gulp-rename'),
-    livereload   = require('gulp-livereload'),
-    htmlreplace  = require('gulp-html-replace'),
-    uglify       = require('gulp-uglifyjs'),
-    beep         = require('beepbeep'),
-    del          = require('del'),
-    chalk        = require('chalk');
+var gulp         = require('gulp');
+var jshint       = require('gulp-jshint');
+var sass         = require('gulp-sass');
+var sourcemaps   = require('gulp-sourcemaps');
+var autoprefixer = require('gulp-autoprefixer');
+var iconify      = require('gulp-iconify');
+var rename       = require('gulp-rename');
+var livereload   = require('gulp-livereload');
+var htmlreplace  = require('gulp-html-replace');
+var uglify       = require('gulp-uglifyjs');
+var beep         = require('beepbeep');
+var del          = require('del');
+var chalk        = require('chalk');
 
 gulp.task('copy:views', function () {
 
@@ -169,5 +169,4 @@ gulp.task('dev', ['lint', 'sass:dev', 'copy:views', 'watch'], function () {
 });
 
 // Compile production Sass
-// Run `foreman start` before building
-gulp.task('build', ['html-replace', 'icons', 'lint']);
+gulp.task('build', ['sass:prod', 'html-replace', 'icons', 'lint']);

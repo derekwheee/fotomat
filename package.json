@@ -26,8 +26,7 @@
     "express": "^4.12.3",
     "express-handlebars": "^2.0.1",
     "mongodb": "^2.0.28",
-    "mongoose": "^4.0.2",
-    "ws": "^0.7.2"
+    "mongoose": "^4.0.2"
   },
   "devDependencies": {
     "beepbeep": "^1.2.0",
@@ -44,7 +43,7 @@
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.0.1",
     "gulp-sourcemaps": "^1.5.1",
-    "gulp-uglifyjs": "^0.6.1",
+    "gulp-uglifyjs": "^0.6.2",
     "jshint-stylish": "^1.0.1"
   }
 }

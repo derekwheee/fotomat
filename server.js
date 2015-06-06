@@ -1,4 +1,3 @@
-var WebSocketServer = require('ws').Server;
 var http = require('http');
 var express = require('express');
 var exphbs  = require('express-handlebars');
@@ -6,7 +5,6 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var app = express();
 var server;
-var ws;
 
 mongoose.connect(process.env.MONGOLAB_URI);
 
@@ -25,62 +23,6 @@ db.once('open', function callback () {
     });
 
     Gif = mongoose.model('gifs', gifSchema);
-
-    var seedData = [
-        new Gif({
-            paths: {
-                preview: 'https://fotomat.herokuapp.com/img/gifs/animation-adrian-preview.gif',
-                high_resolution: 'https://fotomat.herokuapp.com/img/gifs/animation-adrian.gif'
-            },
-            hearts: 0
-        }),
-        new Gif({
-            paths: {
-                preview: 'https://fotomat.herokuapp.com/img/gifs/animation-arash-preview.gif',
-                high_resolution: 'https://fotomat.herokuapp.com/img/gifs/animation-arash.gif'
-            },
-            hearts: 0
-        }),
-        new Gif({
-            paths: {
-                preview: 'https://fotomat.herokuapp.com/img/gifs/animation-jamie-preview.gif',
-                high_resolution: 'https://fotomat.herokuapp.com/img/gifs/animation-jamie.gif'
-            },
-            hearts: 0
-        }),
-        new Gif({
-            paths: {
-                preview: 'https://fotomat.herokuapp.com/img/gifs/animation-chad-preview.gif',
-                high_resolution: 'https://fotomat.herokuapp.com/img/gifs/animation-chad.gif'
-            },
-            hearts: 0
-        }),
-        new Gif({
-            paths: {
-                preview: 'https://fotomat.herokuapp.com/img/gifs/animation-chad-creepy-preview.gif',
-                high_resolution: 'https://fotomat.herokuapp.com/img/gifs/animation-chad-creepy.gif'
-            },
-            hearts: 0
-        }),
-        new Gif({
-            paths: {
-                preview: 'https://fotomat.herokuapp.com/img/gifs/animationadrian-spin-preview.gif',
-                high_resolution: 'https://fotomat.herokuapp.com/img/gifs/animationadrian-spin.gif'
-            },
-            hearts: 0
-        })
-    ];
-
-    // Seed Gifs if emmpty
-    Gif.find({}, function(err, gifs) {
-
-        if (!gifs.length) {
-            seedData.forEach(function (elem) {
-                elem.save();
-            });
-        }
-
-    });
 
 });
 
@@ -160,32 +102,3 @@ app.post('/api/heart', function (req, res) {
 
 server = http.createServer(app);
 server.listen(app.get('port'));
-
-ws = new WebSocketServer({server: server});
-console.log('websocket server created');
-
-
-
-ws.on('connection', function(socket) {
-
-    console.log('websocket connection open');
-
-    socket.on('message', function(data) {
-        var parsed = JSON.parse(data);
-
-        if (parsed.type === 'RFID') {
-            ws.broadcast(data);
-        }
-    });
-
-    socket.on('close', function() {
-        console.log('websocket connection close');
-    });
-});
-
-ws.broadcast = function broadcast(data) {
-    console.log('Clients connected:', ws.clients.length);
-    ws.clients.forEach(function each(client) {
-        client.send(data);
-    });
-};

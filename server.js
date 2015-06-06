@@ -1,4 +1,4 @@
-var WebSocketServer = require("ws").Server
+var WebSocketServer = require('ws').Server;
 var http = require('http');
 var express = require('express');
 var exphbs  = require('express-handlebars');
@@ -124,12 +124,11 @@ app.get('/:id', function (req, res) {
 
     Gif.find({}, function(err, gifs) {
 
-        data = gifs || [];
-
+        data = gifs.reverse() || [];
         Gif.findById(req.params.id, function (err, gif) {
 
             try {
-                res.render('../dist/views/home', {title: 'HOME', id : gif._id, paths : gif.paths, data : data, criticalCss: criticalCss});
+                res.render('../dist/views/home', {title: 'GIF', gif : gif, data : data, criticalCss: criticalCss});
             } catch (err) {
                 res.status(404).render('../dist/views/404', {title: '404'});
             }
@@ -165,16 +164,16 @@ app.post('/api/heart', function (req, res) {
 server = http.createServer(app);
 server.listen(app.get('port'));
 
-ws = new WebSocketServer({server: server})
-console.log("websocket server created")
+ws = new WebSocketServer({server: server});
+console.log('websocket server created');
 
 
 
-ws.on("connection", function(socket) {
+ws.on('connection', function(socket) {
 
-    console.log("websocket connection open");
+    console.log('websocket connection open');
 
-    socket.on('message', function(data, flags) {
+    socket.on('message', function(data) {
         var parsed = JSON.parse(data);
 
         if (parsed.type === 'RFID') {
@@ -182,10 +181,10 @@ ws.on("connection", function(socket) {
         }
     });
 
-    socket.on("close", function() {
-        console.log("websocket connection close")
+    socket.on('close', function() {
+        console.log('websocket connection close');
     });
-})
+});
 
 ws.broadcast = function broadcast(data) {
     console.log('Clients connected:', ws.clients.length);

@@ -1,0 +1,12 @@
+.icon {
+	background-repeat: no-repeat;
+
+	&.icon-heart-outlined {
+		background-image: url('../../../static/img/icons/heart-outlined.png');
+	}
+
+	&.icon-heart {
+		background-image: url('../../../static/img/icons/heart.png');
+	}
+
+}

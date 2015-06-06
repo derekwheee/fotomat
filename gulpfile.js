@@ -167,6 +167,7 @@ gulp.task('uglify', function() {
     return gulp.src([
             './static/components/jquery/dist/jquery.min.js',
             './static/js/vendor/fontfaceobserver.js',
+            './static/js/vendor/verge.js',
             './static/js/jquery.unveil.js',
             './static/js/main.js',
             './static/js/share.js',
@@ -197,4 +198,5 @@ gulp.task('dev', ['lint', 'sass:dev', 'copy:views', 'watch'], function () {
 });
 
 // Compile production Sass
+// Run `foreman start` before building
 gulp.task('build', ['critical', 'html-replace', 'icons', 'lint']);

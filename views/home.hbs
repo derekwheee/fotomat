@@ -1,7 +1,7 @@
 <div class="gif-tiles">
-    {{#data}}
-        <div class="gif-tile" data-id="{{_id}}">
-            <i class="icon-resize-full-screen"></i>
+    {{#gif}}
+        <h2>We Found This For You</h2>
+        <div class="gif-tile featured" data-id="{{_id}}">
             <img src="/img/spacer.gif" data-src="{{paths.preview}}">
             <div class="gif-like">
                 <button class="icon-heart-outlined"></button>
@@ -10,7 +10,25 @@
                 </div>
                 <button class="gif-share">Share</button>
                 <div class="gif-share-dest">
-                    <a href="https://twitter.com/intent/tweet?text=Check%20out%20this%20stupid%20thing&url=https%3A%2F%2Ffotomat.herokuapp.com%2F{{_id}}&hashtags=d3summit,dsummit">Twitter</a>
+                    <a href="https://twitter.com/intent/tweet?text=Check%20out%20this%20ridiculousness&url=https%3A%2F%2Ffotomat.herokuapp.com%2F{{_id}}&hashtags=d3summit,dsummit">Twitter</a>
+                    <a href="#" class="gif-share-facebook">Facebook</a>
+                </div>
+            </div>
+        </div>
+    {{/gif}}
+
+    {{#data}}
+        <div class="gif-tile" data-id="{{_id}}">
+            <a href="/{{_id}}"><i class="icon-resize-full-screen"></i></a>
+            <img src="/img/spacer.gif" data-src="{{paths.preview}}">
+            <div class="gif-like">
+                <button class="icon-heart-outlined"></button>
+                <div class="gif-like-count">
+                    {{hearts}}
+                </div>
+                <button class="gif-share">Share</button>
+                <div class="gif-share-dest">
+                    <a href="https://twitter.com/intent/tweet?text=Check%20out%20this%20ridiculousness&url=https%3A%2F%2Ffotomat.herokuapp.com%2F{{_id}}&hashtags=d3summit,dsummit">Twitter</a>
                     <a href="#" class="gif-share-facebook">Facebook</a>
                 </div>
             </div>

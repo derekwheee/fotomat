@@ -1,30 +1,51 @@
 .gif-tiles {
     @extend .clearfix;
     padding: 0.5em;
+}
 
-    .gif-tile {
-        position: relative;
-        width: calc(100% - 1em);
-        margin: 0.5em;
-        float: left;
-        overflow: hidden;
+.gif-tile {
+    position: relative;
+    width: calc(100% - 1em);
+    height: 0;
+    margin: 0.5em;
+    padding-bottom: calc(100% - 1em);
+    float: left;
+    overflow: hidden;
 
-        @include breakpoint (sm) {
-            width: calc(50% - 1em);
-        }
+    @include breakpoint (sm) {
+        width: calc(50% - 1em);
+        padding-bottom: calc(50% - 1em);
+    }
 
-        @include breakpoint (md) {
-            width: calc(33% - 1em);
-        }
+    @include breakpoint (md) {
+        width: calc(33% - 1em);
+        padding-bottom: calc(33% - 1em);
+    }
 
-        @include breakpoint (lg) {
-            width: calc(25% - 1em);
-        }
+    @include breakpoint (lg) {
+        width: calc(25% - 1em);
+        padding-bottom: calc(25% - 1em);
+    }
+
+    &.featured {
+        width: 100%;
+        max-width: 50em;
+        margin: 4em auto 8em;
+        background: #333;
+        line-height: 1;
+        float: none;
     }
 
     img {
         display: block;
         width: 100%;
+
+        @at-root .gif-tile.featured img {
+            @include breakpoint (sm) {
+                width: 50%;
+                float: left;
+            }
+        }
     }
 
     .icon-resize-full-screen {
@@ -46,12 +67,35 @@
         padding: 0.5em;
         background: rgba(black, 0.4);
 
+        @at-root .gif-tile.featured .gif-like {
+            position: static;
+            padding: 4em 0;
+            background: none;
+
+            @include breakpoint (sm) {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                right: 0;
+                bottom: auto;
+                padding: 0;
+                background: none;
+                transform: translateY(-50%);
+            }
+        }
+
         [class^='icon'] {
             position: relative;
             display: block;
             font-size: 1.5em;
             color: tomato;
             float: left;
+
+            @at-root .gif-tile.featured .gif-like [class^='icon'] {
+                margin: 0 auto;
+                font-size: 4em;
+                float: none;
+            }
         }
 
         .gif-like-count {
@@ -59,6 +103,13 @@
             top: -1px;
             margin: 0 0.5em;
             float: left;
+
+            @at-root .gif-tile.featured .gif-like .gif-like-count {
+                margin: 0 auto;
+                font-size: 4em;
+                text-align: center;
+                float: none;
+            }
         }
 
         button {
@@ -85,6 +136,12 @@
                     background: tomato;
                     color: white;
                 }
+            }
+
+            @at-root .gif-tile.featured .gif-like button {
+                margin: 1em auto;
+                text-align: center;
+                float: none;
             }
         }
 
@@ -119,9 +176,23 @@
         transition: transform 0.3s cubic-bezier(.37, .14, .4, 1.54),
                     opacity 0.3s linear;
 
+        @at-root .gif-tile.featured .gif-share-dest {
+            bottom: 7em;
+            left: 50%;
+            transform: translate(-50%, 6em);
+
+            @include breakpoint(sm) {
+                bottom: 3em;
+            }
+        }
+
         &.is-active {
             transform: translateY(0em);
             opacity: 1;
+
+            @at-root .gif-tile.featured .gif-share-dest.is-active {
+                transform: translate(-50%, 0em);
+            }
         }
 
         &:after {

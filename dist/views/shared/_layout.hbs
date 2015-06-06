@@ -21,6 +21,15 @@
             <meta property="og:image" content="http://ia.media-imdb.com/images/rock.jpg" />
         {{/if}}
 
+        {{#if gif}}
+            <meta name="twitter:card" content="summary_large_image">
+            <meta name="twitter:site" content="@frxnz">
+            <meta name="twitter:creator" content="@frxnz">
+            <meta name="twitter:title" content="#d3summit">
+            <meta name="twitter:description" content="Look at this GIF from Destination Summit.">
+            <meta name="twitter:image" content="{{gif.paths.preview}}">
+        {{/if}}
+
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
         <link rel="stylesheet" href="css/main.css">

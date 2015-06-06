@@ -29,7 +29,7 @@ $(function () {
 
         FB.ui({
             method: 'share',
-            href: location.href + id
+            href: location.host + '/' + id
         }, function(){});
 
         e.preventDefault();
